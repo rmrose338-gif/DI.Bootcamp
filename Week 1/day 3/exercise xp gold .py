@@ -1,3 +1,4 @@
+# Exercise 1
 birthdays = {
 	"Alice": "1990/04/12",
 	"Bob": "1985/09/23",
@@ -5,10 +6,11 @@ birthdays = {
 	"Dana": "1988/06/30",
 	"Eli": "1995/11/08"
 }
-
+    # Exercise 2
 print("Welcome to the birthday lookup!")
 print("You can look up the birthdays of the people in the list!")
 
+# Exercise 3
 new_name = input("Enter a new person's name: ")
 new_birthday = input("Enter this person's birthday (YYYY/MM/DD): ")
 birthdays[new_name] = new_birthday
@@ -24,9 +26,6 @@ if birthday:
 	print(f"{name}'s birthday is {birthday}.")
 else:
 	print(f"Sorry, we don't have the birthday information for {name}")
-
-
-
 
 #exercise4
 
