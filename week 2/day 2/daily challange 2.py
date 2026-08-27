@@ -1,5 +1,5 @@
+#exercise1
 import random
-
 
 class Gene:
 	def __init__(self, value=None):
