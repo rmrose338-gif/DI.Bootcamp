@@ -1,8 +1,6 @@
-from googletrans import Translator
-
-
+# Challenge
 french_words = ["Bonjour", "Au revoir", "Bienvenue", "A bientôt"]
-translator = Translator()
+translator = 'Translator'()
 
 translated_words = {}
 for word in french_words:

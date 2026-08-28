@@ -1,0 +1,68 @@
+# Daily Challenge: Text Analysis and Modification
+import re
+import string
+from collections import Counter
+from pathlib import Path
+
+
+class Text:
+    def __init__(self, text):
+        self.text = text
+
+    def _words(self):
+        return self.text.split()
+
+    def word_frequency(self, word):
+        normalized_word = word.casefold()
+        count = sum(
+            current_word.casefold() == normalized_word
+            for current_word in self._words()
+        )
+        return count if count else None
+
+    def most_common_word(self):
+        words = [word.casefold() for word in self._words()]
+        if not words:
+            return None
+        return Counter(words).most_common(1)[0][0]
+
+    def unique_words(self):
+        return list(dict.fromkeys(self._words()))
+
+    @classmethod
+    def from_file(cls, file_path):
+        path = Path(file_path)
+        return cls(path.read_text(encoding="utf-8"))
+
+
+class TextModification(Text):
+    STOP_WORDS = {
+        "a", "an", "and", "are", "as", "at", "be", "by", "for",
+        "from", "has", "he", "in", "is", "it", "its", "of", "on",
+        "that", "the", "this", "to", "was", "were", "will", "with",
+    }
+
+    def remove_punctuation(self):
+        translation_table = str.maketrans("", "", string.punctuation)
+        self.text = self.text.translate(translation_table)
+        return self.text
+
+    def remove_stop_words(self):
+        self.text = " ".join(
+            word for word in self._words()
+            if word.casefold() not in self.STOP_WORDS
+        )
+        return self.text
+
+    def remove_special_characters(self):
+        self.text = re.sub(r"[^\w\s]", "", self.text, flags=re.UNICODE)
+        return self.text
+
+
+if __name__ == "__main__":
+    sample = TextModification("This is a sample text, with punctuation!")
+    print("Most common word:", sample.most_common_word())
+    print("Unique words:", sample.unique_words())
+    print("Without punctuation:", sample.remove_punctuation())
+    print("Without stop words:", sample.remove_stop_words())
+    print("Without special characters:", sample.remove_special_characters())
