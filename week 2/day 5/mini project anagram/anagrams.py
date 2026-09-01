@@ -9,6 +9,7 @@ MENU = """
 
 
 def get_valid_input():
+    """Get and validate user input"""
     word = input("Enter one word: ").strip()
     if not word:
         print("Error: please enter a word.")
@@ -23,6 +24,7 @@ def get_valid_input():
 
 
 def show_word_result(checker, word):
+    """Display word validity and anagrams"""
     is_valid = checker.is_valid_word(word)
     anagrams = checker.get_anagrams(word) if is_valid else []
     print(f"\nYour word: {word}")
@@ -34,6 +36,7 @@ def show_word_result(checker, word):
 
 
 def main():
+    """Main menu loop"""
     try:
         checker = AnagramChecker()
     except FileNotFoundError:

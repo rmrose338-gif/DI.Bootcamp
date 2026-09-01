@@ -16,41 +16,41 @@ import random
 
 
 class Card:
-	SUITS = ("Hearts", "Diamonds", "Clubs", "Spades")
-	VALUES = ("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K")
+    SUITS = ("Hearts", "Diamonds", "Clubs", "Spades")
+    VALUES = ("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K")
 
-	def __init__(self, suit, value):
-		if suit not in self.SUITS or value not in self.VALUES:
-			raise ValueError("Invalid suit or value.")
-		self.suit = suit
-		self.value = value
+    def __init__(self, suit, value):
+        if suit not in self.SUITS or value not in self.VALUES:
+            raise ValueError("Invalid suit or value.")
+        self.suit = suit
+        self.value = value
 
-	def __str__(self):
-		return f"{self.value} of {self.suit}"
+    def __str__(self):
+        return f"{self.value} of {self.suit}"
 
 
 class Deck:
-	def __init__(self):
-		self.cards = []
-		self.shuffle()
+    def __init__(self):
+        self.cards = []
+        self.shuffle()
 
-	def shuffle(self):
-		self.cards = [
-			Card(suit, value)
-			for suit in Card.SUITS
-			for value in Card.VALUES
-		]
-		random.shuffle(self.cards)
+    def shuffle(self):
+        self.cards = [
+            Card(suit, value)
+            for suit in Card.SUITS
+            for value in Card.VALUES
+        ]
+        random.shuffle(self.cards)
 
-	def deal(self):
-		if not self.cards:
-			return None
-		return self.cards.pop()
+    def deal(self):
+        if not self.cards:
+            return None
+        return self.cards.pop()
 
 
 if __name__ == "__main__":
-	deck = Deck()
-	print(f"Deck contains {len(deck.cards)} cards.")
-	print(f"Dealt card: {deck.deal()}")
+    deck = Deck()
+    print(f"Deck contains {len(deck.cards)} cards.")
+    print(f"Dealt card: {deck.deal()}")
 
 
