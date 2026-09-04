@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <link rel="stylesheet" href="daily challange.css">
+  <script src="daily challange.js" defer></script>
+</head>
+<body>
+  <main class="todo-app">
+    <header>
+      <p class="eyebrow">Daily organizer</p>
+      <h1>Todo <span>list</span></h1>
+      <p class="intro">Keep the next useful thing in front of you.</p>
+    </header>
+
+    <form id="task-form" class="task-form">
+      <label for="task-input">New task</label>
+      <div class="input-row">
+        <input id="task-input" type="text" placeholder="What needs doing?" autocomplete="off">
+        <button type="submit">Submit <span aria-hidden="true">&#8594;</span></button>
+      </div>
+      <p id="form-message" class="form-message" aria-live="polite"></p>
+    </form>
+
+    <section class="tasks-section" aria-labelledby="tasks-title">
+      <div class="section-heading"><h2 id="tasks-title">Your tasks</h2><span id="task-count">0 tasks</span></div>
+      <div class="listTasks"></div>
+    </section>
+  </main>
+</body>
+</html>

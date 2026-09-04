@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coloring Squares</title>
+  <link rel="stylesheet" href="mini project 1.css">
+  <script src="mini project 1.js" defer></script>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Pixel studio</p>
+        <h1>Coloring <span>Squares</span></h1>
+      </div>
+      <button id="clear-button" class="clear-button" type="button">Clear canvas</button>
+    </header>
+
+    <section class="workspace" aria-label="Coloring workspace">
+      <aside class="palette-panel">
+        <p class="panel-label">Choose a color</p>
+        <div id="color-palette" class="palette" role="radiogroup" aria-label="Colors"></div>
+        <div class="selected-color-row"><span>Selected</span><span id="selected-color" class="selected-swatch" aria-hidden="true"></span></div>
+        <p class="hint">Click or drag across the grid to paint.</p>
+      </aside>
+      <div id="drawing-grid" class="drawing-grid" role="grid" aria-label="Drawing grid"></div>
+    </section>
+  </main>
+</body>
+</html>
