@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Quote Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 650px; margin: 30px auto; line-height: 1.5; }
+    section { padding: 15px; border: 2px solid #333; border-radius: 5px; min-height: 60px; background: #fafafa; }
+    .quote-author { font-weight: bold; margin-top: 10px; color: #555; }
+    .btn-group { margin: 15px 0; display: flex; gap: 8px; flex-wrap: wrap; }
+    .form-group { margin-bottom: 10px; }
+    .form-group label { display: block; font-weight: bold; }
+    .stats { font-weight: bold; color: #0066cc; margin-top: 8px; }
+    hr { margin: 25px 0; border: none; border-top: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+
+  <h1>Random Quote Generator</h1>
+
+  <!-- PART 1: Display Section & Generate Button -->
+  <section id="quote-display">
+    <p class="quote-text">Click "Generate Quote" to start!</p>
+    <p class="quote-author"></p>
+  </section>
+
+  <div class="btn-group">
+    <button id="btn-generate">Generate Quote</button>
+  </div>
+
+  <!-- PART 2: Quote Info Buttons -->
+  <div class="btn-group">
+    <button id="btn-space">Chars (with spaces)</button>
+    <button id="btn-nospace">Chars (no spaces)</button>
+    <button id="btn-words">Word Count</button>
+    <button id="btn-like">Like ❤️ (<span id="like-count">0</span>)</button>
+  </div>
+  <div id="stats-output" class="stats"></div>
+
+  <hr>
+
+  <!-- PART 2: Add Quote Form -->
+  <h3>Add a Quote</h3>
+  <form id="add-quote-form">
+    <div class="form-group">
+      <label for="input-quote">Quote:</label>
+      <input type="text" id="input-quote" style="width: 100%;" required>
+    </div>
+    <div class="form-group">
+      <label for="input-author">Author:</label>
+      <input type="text" id="input-author" style="width: 100%;" required>
+    </div>
+    <button type="submit">Add Quote</button>
+  </form>
+
+  <hr>
+
+  <!-- PART 3: Filter Form & Navigation -->
+  <h3>Filter by Author</h3>
+  <form id="filter-author-form">
+    <div class="form-group">
+      <label for="input-filter">Author Name:</label>
+      <input type="text" id="input-filter" required>
+    </div>
+    <button type="submit">Filter</button>
+  </form>
+
+  <div id="filter-container" style="display: none; margin-top: 15px;">
+    <section id="filter-display">
+      <p id="filter-text"></p>
+      <p id="filter-author" class="quote-author"></p>
+    </section>
+    <div class="btn-group">
+      <button id="btn-prev">Previous</button>
+      <button id="btn-next">Next</button>
+    </div>
+  </div>
+
+  <script>
+    // PART 1: Initial Array with IDs starting at 0 and 'likes' key
+    const quotes = [
+      { id: 0, author: "Oscar Wilde", quote: "Be yourself; everyone else is already taken.", likes: 0 },
+      { id: 1, author: "Albert Einstein", quote: "Two things are infinite: the universe and human stupidity.", likes: 0 },
+      { id: 2, author: "Frank Zappa", quote: "So many books, so little time.", likes: 0 },
+      { id: 3, author: "Oscar Wilde", quote: "To live is the rarest thing in the world.", likes: 0 }
+    ];
+
+    let currentQuote = null;
+    let lastGeneratedId = null;
+
+    const quoteDisplay = document.getElementById('quote-display');
+    const statsOutput = document.getElementById('stats-output');
+    const likeCountSpan = document.getElementById('like-count');
+
+    // Generate random quote without displaying the same one twice in a row
+    document.getElementById('btn-generate').addEventListener('click', () => {
+      if (quotes.length === 0) return;
+
+      let randomIndex;
+      do {
+        randomIndex = Math.floor(Math.random() * quotes.length);
+      } while (quotes.length > 1 && quotes[randomIndex].id === lastGeneratedId);
+
+      currentQuote = quotes[randomIndex];
+      lastGeneratedId = currentQuote.id;
+
+      renderCurrentQuote();
+    });
+
+    function renderCurrentQuote() {
+      quoteDisplay.querySelector('.quote-text').textContent = `"${currentQuote.quote}"`;
+      quoteDisplay.querySelector('.quote-author').textContent = `— ${currentQuote.author}`;
+      likeCountSpan.textContent = currentQuote.likes;
+      statsOutput.textContent = '';
+    }
+
+    // PART 2: Detail Buttons & Like Handler
+    document.getElementById('btn-space').addEventListener('click', () => {
+      if (!currentQuote) return;
+      statsOutput.textContent = `Characters (with spaces): ${currentQuote.quote.length}`;
+    });
+
+    document.getElementById('btn-nospace').addEventListener('click', () => {
+      if (!currentQuote) return;
+      const count = currentQuote.quote.replace(/\s+/g, '').length;
+      statsOutput.textContent = `Characters (no spaces): ${count}`;
+    });
+
+    document.getElementById('btn-words').addEventListener('click', () => {
+      if (!currentQuote) return;
+      const words = currentQuote.quote.trim().split(/\s+/).filter(w => w.length > 0);
+      statsOutput.textContent = `Word Count: ${words.length}`;
+    });
+
+    document.getElementById('btn-like').addEventListener('click', () => {
+      if (!currentQuote) return;
+      currentQuote.likes += 1;
+      likeCountSpan.textContent = currentQuote.likes;
+    });
+
+    // PART 2: Add New Quote (increments ID based on array length)
+    document.getElementById('add-quote-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const quoteInput = document.getElementById('input-quote');
+      const authorInput = document.getElementById('input-author');
+
+      const newQuote = {
+        id: quotes.length,
+        author: authorInput.value.trim(),
+        quote: quoteInput.value.trim(),
+        likes: 0
+      };
+
+      quotes.push(newQuote);
+      alert('New quote added!');
+      e.target.reset();
+    });
+
+    // PART 3: Filter & Navigation
+    let filteredList = [];
+    let filterIndex = 0;
+
+    const filterContainer = document.getElementById('filter-container');
+    const filterText = document.getElementById('filter-text');
+    const filterAuthor = document.getElementById('filter-author');
+
+    document.getElementById('filter-author-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const searchTerm = document.getElementById('input-filter').value.trim().toLowerCase();
+
+      filteredList = quotes.filter(q => q.author.toLowerCase().includes(searchTerm));
+      filterIndex = 0;
+
+      if (filteredList.length === 0) {
+        alert('No quotes found for this author.');
+        filterContainer.style.display = 'none';
+        return;
+      }
+
+      filterContainer.style.display = 'block';
+      renderFilteredQuote();
+    });
+
+    function renderFilteredQuote() {
+      const q = filteredList[filterIndex];
+      filterText.textContent = `"${q.quote}"`;
+      filterAuthor.textContent = `— ${q.author} (${filterIndex + 1} of ${filteredList.length})`;
+    }
+
+    document.getElementById('btn-prev').addEventListener('click', () => {
+      if (filteredList.length === 0) return;
+      filterIndex = (filterIndex - 1 + filteredList.length) % filteredList.length;
+      renderFilteredQuote();
+    });
+
+    document.getElementById('btn-next').addEventListener('click', () => {
+      if (filteredList.length === 0) return;
+      filterIndex = (filterIndex + 1) % filteredList.length;
+      renderFilteredQuote();
+    });
+  </script>
+
+</body>
+</html>
