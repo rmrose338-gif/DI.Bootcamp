@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Exercises XP #3</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    form { margin-bottom: 15px; }
+    #gif-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+    #gif-container img { max-width: 200px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+  <!-- Exercise 1 UI Elements -->
+  <h2>Giphy Search</h2>
+  <form id="search-form">
+    <input type="text" id="category-input" placeholder="Search for GIFs..." required>
+    <button type="submit">Search</button>
+  </form>
+  <button id="delete-all-btn">Delete All GIFs</button>
+
+  <div id="gif-container"></div>
+
+  <script>
+    
+    // Exercise 1: Giphy Search & Dynamic Render
+    
+    const apiKey = "hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My";
+    const form = document.getElementById("search-form");
+    const input = document.getElementById("category-input");
+    const container = document.getElementById("gif-container");
+    const deleteAllBtn = document.getElementById("delete-all-btn");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const searchTerm = input.value.trim();
+
+      if (!searchTerm) return;
+
+      try {
+        const response = await fetch(`https://api.giphy.com/v1/gifs/search?q=${encodeURIComponent(searchTerm)}&limit=1&rating=g&api_key=${apiKey}`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP Error Status: ${response.status}`);
+        }
+
+        const dataObj = await response.json();
+
+        if (dataObj.data.length > 0) {
+          const gifUrl = dataObj.data[0].images.original.url;
+          
+          const img = document.createElement("img");
+          img.src = gifUrl;
+          img.alt = searchTerm;
+          
+          container.appendChild(img);
+        } else {
+          console.log("No GIFs found for that search term.");
+        }
+      } catch (error) {
+        console.error("Exercise 1 Error:", error.message);
+      }
+
+      input.value = "";
+    });
+
+    // Remove all appended GIFs
+    deleteAllBtn.addEventListener("click", () => {
+      container.innerHTML = "";
+    });
+
+
+  
+    // Shared Promise Helpers
+    
+    let resolveAfter2Seconds = function () {
+      console.log("starting slow promise");
+      return new Promise((resolve) => {
+        setTimeout(function () {
+          resolve("slow");
+          console.log("slow promise is done");
+        }, 2000);
+      });
+    };
+
+    let resolveAfter1Second = function () {
+      console.log("starting fast promise");
+      return new Promise((resolve) => {
+        setTimeout(function () {
+          resolve("fast");
+          console.log("fast promise is done");
+        }, 1000);
+      });
+    };
+
+
+    
+    // Exercise 2: Analyze #4 (Promise.all)
+    
+    let concurrentPromise = function () {
+      console.log("==CONCURRENT START with Promise.all==");
+      return Promise.all([resolveAfter2Seconds(), resolveAfter1Second()]).then((messages) => {
+        console.log(messages[0]);
+        console.log(messages[1]);
+      });
+    };
+
+    setTimeout(concurrentPromise, 1000);
+
+
+    
+    // Exercise 3: Analyze #5 (Parallel IIFEs)
+    
+    let parallel = async function () {
+      console.log("==PARALLEL with await Promise.all==");
+      await Promise.all([
+        (async () => console.log(await resolveAfter2Seconds()))(),
+        (async () => console.log(await resolveAfter1Second()))()
+      ]);
+    };
+
+    setTimeout(parallel, 5000);
+
+
+    
+    // Exercise 4: Analyze #6 (Parallel .then)
+  
+    let parallelPromise = function () {
+      console.log("==PARALLEL with Promise.then==");
+      resolveAfter2Seconds().then((message) => console.log(message));
+      resolveAfter1Second().then((message) => console.log(message));
+    };
+
+    setTimeout(parallelPromise, 10000);
+  </script>
+</body>
+</html>
