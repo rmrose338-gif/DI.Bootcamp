@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Star Wars Character Finder</title>
+  <!-- FontAwesome for the loading spinner and error icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0b0f19;
+      background-image: radial-gradient(circle at center, #1e293b 0%, #0b0f19 100%);
+      color: #f8fafc;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: #151d2a;
+      border: 2px solid #ffe81f;
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      width: 360px;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255, 232, 31, 0.2);
+    }
+
+    .character-name {
+      color: #ffe81f;
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .instruction-text {
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .details p {
+      font-size: 1.05rem;
+      margin: 0.6rem 0;
+      color: #e2e8f0;
+    }
+
+    .details strong {
+      color: #ffe81f;
+    }
+
+    .status-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem 0;
+    }
+
+    .spinner-icon {
+      color: #ffe81f;
+    }
+
+    .error-box {
+      color: #ef4444;
+    }
+
+    .status-message {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    button {
+      background-color: #ffe81f;
+      color: #0b0f19;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 4px 10px rgba(255, 232, 31, 0.3);
+    }
+
+    button:hover {
+      background-color: #ffffff;
+      color: #000000;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 255, 255, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <main class="card">
+    <div id="content-display">
+      <h1 class="character-name">Star Wars Finder</h1>
+      <p class="instruction-text">Click below to find a random character.</p>
+    </div>
+
+    <button id="find-btn">Find Someone</button>
+  </main>
+
+  <script>
+    const contentDisplay = document.getElementById("content-display");
+    const findBtn = document.getElementById("find-btn");
+    const TOTAL_CHARACTERS = 83;
+
+    findBtn.addEventListener("click", getStarWarsCharacter);
+
+    async function getStarWarsCharacter() {
+      showLoading();
+
+      try {
+        const randomId = Math.floor(Math.random() * TOTAL_CHARACTERS) + 1;
+
+        // Fetch character data
+        const response = await fetch(`https://www.swapi.tech/api/people/${randomId}`);
+        
+        // Debug Error 1: Explicitly handle 404/500 HTTP statuses
+        if (!response.ok) {
+          throw new Error("Character data not available");
+        }
+
+        const data = await response.json();
+        const properties = data.result.properties;
+
+        // Debug Error 2: Perform secondary fetch to get homeworld name instead of raw URL
+        let homeworldName = "Unknown";
+        if (properties.homeworld) {
+          try {
+            const hwResponse = await fetch(properties.homeworld);
+            if (hwResponse.ok) {
+              const hwData = await hwResponse.json();
+              homeworldName = hwData.result.properties.name;
+            }
+          } catch (err) {
+            console.warn("Homeworld fetch failed, defaulting to Unknown:", err);
+          }
+        }
+
+        // Debug Error 3: Map API property birth_year correctly
+        renderCharacter({
+          name: properties.name,
+          height: properties.height,
+          gender: properties.gender,
+          birthYear: properties.birth_year, 
+          homeworld: homeworldName
+        });
+
+      } catch (error) {
+        showError();
+      }
+    }
+
+    function showLoading() {
+      contentDisplay.innerHTML = `
+        <div class="status-box">
+          <i class="fa-solid fa-spinner fa-spin fa-3x spinner-icon"></i>
+          <p class="status-message">Loading...</p>
+        </div>
+      `;
+    }
+
+    function renderCharacter(character) {
+      contentDisplay.innerHTML = `
+        <h1 class="character-name">${character.name}</h1>
+        <div class="details">
+          <p><strong>Height:</strong> ${character.height} cm</p>
+          <p><strong>Gender:</strong> ${character.gender}</p>
+          <p><strong>Birth Year:</strong> ${character.birthYear}</p>
+          <p><strong>Home World:</strong> ${character.homeworld}</p>
+        </div>
+      `;
+    }
+
+    function showError() {
+      contentDisplay.innerHTML = `
+        <div class="status-box error-box">
+          <i class="fa-solid fa-triangle-exclamation fa-3x"></i>
+          <p class="status-message">Oh No! That person isn't available.</p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

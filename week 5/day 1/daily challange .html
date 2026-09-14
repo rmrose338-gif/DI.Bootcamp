@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Converter</title>
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .converter-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #38bdf8;
+      letter-spacing: 0.5px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group label {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      color: #f8fafc;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+    }
+
+    .currency-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .select-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    select.input-field {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1em;
+      padding-right: 2.5rem;
+    }
+
+    .switch-btn {
+      background: #334155;
+      color: #38bdf8;
+      border: 1px solid #475569;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .switch-btn:hover {
+      background: #38bdf8;
+      color: #0f172a;
+      transform: rotate(180deg);
+    }
+
+    .result-display {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .rate-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #f8fafc;
+    }
+
+    .error-text {
+      color: #ef4444;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .convert-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: #38bdf8;
+      color: #0f172a;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .convert-btn:hover {
+      background: #0ea5e9;
+    }
+
+    .convert-btn:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <main class="converter-card">
+    <h1 class="title">Currency Converter</h1>
+
+    <!-- Amount Input -->
+    <div class="input-group">
+      <label for="amount">Amount</label>
+      <input type="number" id="amount" class="input-field" value="1" min="0.01" step="any" placeholder="Enter amount">
+    </div>
+
+    <!-- Currency Selection Row -->
+    <div class="currency-row">
+      <div class="select-box">
+        <label for="from-currency">From</label>
+        <select id="from-currency" class="input-field"></select>
+      </div>
+
+      <button id="switch-btn" class="switch-btn" title="Switch Currencies">
+        <i class="fa-solid fa-arrows-rotate"></i>
+      </button>
+
+      <div class="select-box">
+        <label for="to-currency">To</label>
+        <select id="to-currency" class="input-field"></select>
+      </div>
+    </div>
+
+    <!-- Result / Output Area -->
+    <div class="result-display" id="result-display">
+      <p class="rate-text">Select currencies to convert</p>
+    </div>
+
+    <!-- Submit Action Button -->
+    <button id="convert-btn" class="convert-btn">Convert Rate</button>
+  </main>
+
+  <script>
+    // ExchangeRate-API Key
+    const API_KEY = "4964227593f95a323bebae81";
+    const BASE_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}`;
+
+    // DOM References
+    const amountInput = document.getElementById("amount");
+    const fromSelect = document.getElementById("from-currency");
+    const toSelect = document.getElementById("to-currency");
+    const switchBtn = document.getElementById("switch-btn");
+    const convertBtn = document.getElementById("convert-btn");
+    const resultDisplay = document.getElementById("result-display");
+
+    // Initialize application
+    window.addEventListener("DOMContentLoaded", initializeApp);
+
+    async function initializeApp() {
+      await populateCurrencies();
+
+      // Set default options if available
+      if (fromSelect.querySelector('option[value="USD"]')) fromSelect.value = "USD";
+      if (toSelect.querySelector('option[value="EUR"]')) toSelect.value = "EUR";
+
+      // Attach Event Listeners
+      convertBtn.addEventListener("click", getConversionRate);
+      switchBtn.addEventListener("click", handleSwitch);
+    }
+
+    // 1. Fetch supported currencies from API
+    async function populateCurrencies() {
+      try {
+        const response = await fetch(`${BASE_URL}/codes`);
+        
+        // Debug Error: Explicit HTTP error handling
+        if (!response.ok) throw new Error("Failed to fetch supported currencies.");
+
+        const data = await response.json();
+
+        if (data.result !== "success") throw new Error("API error occurred.");
+
+        const codes = data.supported_codes;
+
+        fromSelect.innerHTML = "";
+        toSelect.innerHTML = "";
+
+        codes.forEach(([code, name]) => {
+          const optFrom = document.createElement("option");
+          optFrom.value = code;
+          optFrom.textContent = `${code} - ${name}`;
+          fromSelect.appendChild(optFrom);
+
+          const optTo = document.createElement("option");
+          optTo.value = code;
+          optTo.textContent = `${code} - ${name}`;
+          toSelect.appendChild(optTo);
+        });
+
+      } catch (error) {
+        showError("Could not load currencies. Please check your API key or connection.");
+      }
+    }
+
+    // 2. Fetch pair conversion rate & amount calculation from API
+    async function getConversionRate() {
+      const amount = parseFloat(amountInput.value);
+      const from = fromSelect.value;
+      const to = toSelect.value;
+
+      // Input Validation
+      if (isNaN(amount) || amount <= 0) {
+        showError("Please enter a valid amount greater than 0.");
+        return;
+      }
+
+      showLoading();
+
+      try {
+        // Fetch pair conversion rate with amount parameter
+        const response = await fetch(`${BASE_URL}/pair/${from}/${to}/${amount}`);
+        
+        if (!response.ok) throw new Error("Conversion endpoint request failed.");
+
+        const data = await response.json();
+
+        if (data.result !== "success") throw new Error("Failed to calculate exchange rate.");
+
+        const convertedAmount = data.conversion_result.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+
+        // Display results
+        resultDisplay.innerHTML = `
+          <p class="rate-text">${amount} ${from} = ${convertedAmount} ${to}</p>
+        `;
+
+      } catch (error) {
+        showError("Exchange conversion failed. Please try again.");
+      }
+    }
+
+    // 3. Bonus Switch Feature
+    function handleSwitch() {
+      const temp = fromSelect.value;
+      fromSelect.value = toSelect.value;
+      toSelect.value = temp;
+
+      // Trigger recalculation immediately after switching
+      getConversionRate();
+    }
+
+    // UI State Helpers
+    function showLoading() {
+      resultDisplay.innerHTML = `
+        <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: #38bdf8;"></i>
+      `;
+    }
+
+    function showError(message) {
+      resultDisplay.innerHTML = `
+        <p class="error-text"><i class="fa-solid fa-circle-exclamation"></i> ${message}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
