@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <style>
+    :root {
+      --bg-color: #f7f3f9;
+      --card-bg: #ffffff;
+      --primary: #b5ead7;
+      --primary-hover: #9cdac4;
+      --text-main: #554d56;
+      --accent-pink: #ffdac1;
+      --accent-purple: #c7ceea;
+      --disabled: #e0e0e0;
+      --border-radius: 16px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 25px rgba(181, 234, 215, 0.3);
+      width: 100%;
+      max-width: 380px;
+      border: 2px solid var(--accent-purple);
+    }
+
+    h2 {
+      margin-top: 0;
+      text-align: center;
+      color: #6c5ce7;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--accent-purple);
+      border-radius: 10px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: #a29bfe;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      background-color: var(--primary);
+      border: none;
+      border-radius: 10px;
+      color: #4a4a4a;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      background-color: var(--disabled);
+      color: #a1a1a1;
+      cursor: not-allowed;
+    }
+
+    #message {
+      margin-top: 1.2rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      min-height: 1.2em;
+    }
+
+    .link-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    .link-footer a {
+      color: #6c5ce7;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Register</h2>
+    <form id="registerForm">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Enter name" required />
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" placeholder="Enter last name" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter email" required />
+      </div>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password" required />
+      </div>
+      <button type="submit" id="submitBtn" disabled>Register</button>
+    </form>
+    <div id="message"></div>
+    <div class="link-footer">
+      Already have an account? <a href="/login.html">Login here</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    const inputs = form.querySelectorAll('input');
+    const submitBtn = document.getElementById('submitBtn');
+    const messageDiv = document.getElementById('message');
+
+    // Enable button only when all 5 inputs have non-whitespace content
+    function validateInputs() {
+      const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+      submitBtn.disabled = !allFilled;
+    }
+
+    inputs.forEach(input => input.addEventListener('input', validateInputs));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        lastName: document.getElementById('lastName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        username: document.getElementById('username').value.trim(),
+        password: document.getElementById('password').value
+      };
+
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+          messageDiv.style.color = '#2ed573';
+          messageDiv.textContent = data.message || 'Hello Your account is created!';
+          form.reset();
+          submitBtn.disabled = true;
+        } else {
+          messageDiv.style.color = '#ff6b6b';
+          messageDiv.textContent = data.error || 'Registration failed.';
+        }
+      } catch (err) {
+        messageDiv.style.color = '#ff6b6b';
+        messageDiv.textContent = 'Server error. Please try again.';
+      }
+    });
+  </script>
+</body>
+</html>

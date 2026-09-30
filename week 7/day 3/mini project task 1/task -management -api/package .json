@@ -1,0 +1,13 @@
+{
+  "name": "task-management-api",
+  "version": "1.0.0",
+  "description": "Task Management API with Express.js and JSON file storage",
+  "main": "app.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

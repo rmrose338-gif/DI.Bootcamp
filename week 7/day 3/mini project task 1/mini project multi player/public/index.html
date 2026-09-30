@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid Tactics - Strategy Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --accent-blue: #38bdf8;
+      --accent-red: #f43f5e;
+      --accent-gold: #f59e0b;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--accent-blue);
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+    }
+
+    .container {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      border: 1px solid #334155;
+    }
+
+    /* Auth & Setup Forms */
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; color: var(--text-sub); }
+    input {
+      width: 100%; padding: 10px; border-radius: 6px;
+      border: 1px solid #475569; background: #0f172a; color: white;
+    }
+    button {
+      background: var(--accent-blue); color: #0f172a; font-weight: bold;
+      padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer;
+      transition: background 0.2s; font-family: 'Orbitron', sans-serif;
+    }
+    button:hover { filter: brightness(1.1); }
+    
+    /* Board Layout */
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(10, 45px);
+      grid-template-rows: repeat(10, 45px);
+      gap: 4px;
+      background: #0f172a;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .cell {
+      width: 45px; height: 45px;
+      background: #334155;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      position: relative;
+    }
+
+    .cell.obstacle { background: #475569; opacity: 0.6; }
+    .cell.base-p1 { border: 2px solid var(--accent-blue); background: rgba(56, 189, 248, 0.2); }
+    .cell.base-p2 { border: 2px solid var(--accent-red); background: rgba(244, 63, 94, 0.2); }
+    
+    .player-token {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 14px;
+    }
+    .p1-token { background: var(--accent-blue); color: #000; box-shadow: 0 0 10px var(--accent-blue); }
+    .p2-token { background: var(--accent-red); color: #fff; box-shadow: 0 0 10px var(--accent-red); }
+
+    /* Controls & Dashboard */
+    .dashboard { min-width: 280px; flex: 1; }
+    .turn-indicator {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem; margin-bottom: 15px; padding: 10px;
+      background: #0f172a; border-radius: 6px; text-align: center;
+    }
+
+    .d-pad {
+      display: grid;
+      grid-template-columns: repeat(3, 50px);
+      grid-template-rows: repeat(3, 50px);
+      gap: 5px; margin: 15px auto; justify-content: center;
+    }
+    .d-pad button { font-size: 16px; }
+
+    .attack-btn {
+      width: 100%; background: var(--accent-red); color: white;
+      margin-top: 10px; padding: 12px; font-size: 1rem;
+    }
+
+    .log-box {
+      height: 120px; overflow-y: auto; background: #0f172a;
+      border-radius: 6px; padding: 10px; font-size: 0.85rem;
+      color: var(--text-sub); margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>GRID TACTICS</h1>
+
+  <div class="container">
+    <!-- Setup / Login Panel -->
+    <div class="card" id="setup-panel" style="width: 320px;">
+      <h3 style="margin-bottom: 15px;">Start Session</h3>
+      <div class="form-group">
+        <label>Player 1 Name</label>
+        <input type="text" id="p1-input" value="Alpha">
+      </div>
+      <div class="form-group">
+        <label>Player 2 Name</label>
+        <input type="text" id="p2-input" value="Bravo">
+      </div>
+      <button style="width: 100%;" onclick="startGame()">Start Game</button>
+    </div>
+
+    <!-- Game Board -->
+    <div class="card" id="board-panel" style="display: none;">
+      <div id="grid"></div>
+    </div>
+
+    <!-- Controls & Status -->
+    <div class="card dashboard" id="dashboard-panel" style="display: none;">
+      <div class="turn-indicator" id="turn-display">Turn: -</div>
+      
+      <!-- D-Pad Directional Controls -->
+      <div class="d-pad">
+        <div></div>
+        <button onclick="makeMove('up')">▲</button>
+        <div></div>
+        <button onclick="makeMove('left')">◀</button>
+        <div></div>
+        <button onclick="makeMove('right')">▶</button>
+        <div></div>
+        <button onclick="makeMove('down')">▼</button>
+        <div></div>
+      </div>
+
+      <button class="attack-btn" onclick="attackBase()">⚔️ Attack Base</button>
+
+      <div class="log-box" id="game-log"></div>
+    </div>
+  </div>
+
+  <script>
+    let gameState = null;
+
+    async function startGame() {
+      const player1 = document.getElementById('p1-input').value;
+      const player2 = document.getElementById('p2-input').value;
+
+      const res = await fetch('/api/game/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ player1, player2 })
+      });
+
+      const data = await res.json();
+      gameState = data.state;
+
+      document.getElementById('setup-panel').style.display = 'none';
+      document.getElementById('board-panel').style.display = 'block';
+      document.getElementById('dashboard-panel').style.display = 'block';
+
+      renderBoard();
+      updateDashboard();
+    }
+
+    function renderBoard() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+
+      const { players, obstacles } = gameState;
+
+      for (let r = 0; r < 10; r++) {
+        for (let c = 0; c < 10; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+
+          // Base styling
+          if (r === players.p1.base.r && c === players.p1.base.c) cell.classList.add('base-p1');
+          if (r === players.p2.base.r && c === players.p2.base.c) cell.classList.add('base-p2');
+
+          // Obstacle styling
+          if (obstacles.some(o => o.r === r && o.c === c)) {
+            cell.classList.add('obstacle');
+            cell.innerHTML = '🪨';
+          }
+
+          // Player position styling
+          if (r === players.p1.pos.r && c === players.p1.pos.c) {
+            cell.innerHTML = `<div class="player-token p1-token">P1</div>`;
+          } else if (r === players.p2.pos.r && c === players.p2.pos.c) {
+            cell.innerHTML = `<div class="player-token p2-token">P2</div>`;
+          }
+
+          grid.appendChild(cell);
+        }
+      }
+    }
+
+    function updateDashboard() {
+      const turnDisplay = document.getElementById('turn-display');
+      const logBox = document.getElementById('game-log');
+
+      if (gameState.winner) {
+        turnDisplay.style.color = 'var(--accent-gold)';
+        turnDisplay.innerHTML = `🏆 WINNER: ${gameState.winner}!`;
+      } else {
+        turnDisplay.style.color = gameState.turn === gameState.players.p1.name ? 'var(--accent-blue)' : 'var(--accent-red)';
+        turnDisplay.innerHTML = `Current Turn: ${gameState.turn}`;
+      }
+
+      logBox.innerHTML = gameState.log.map(entry => `<div>${entry}</div>`).join('');
+    }
+
+    async function makeMove(direction) {
+      if (gameState.winner) return;
+
+      const res = await fetch('/api/game/move', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ player: gameState.turn, direction })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        gameState = data.state;
+        renderBoard();
+        updateDashboard();
+      } else {
+        alert(data.error);
+      }
+    }
+
+    async function attackBase() {
+      if (gameState.winner) return;
+
+      const res = await fetch('/api/game/attack', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ player: gameState.turn })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        gameState = data.state;
+        renderBoard();
+        updateDashboard();
+      } else {
+        alert(data.error);
+      }
+    }
+  </script>
+</body>
+</html>
