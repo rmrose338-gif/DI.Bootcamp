@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap');
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #27352f;
+  background: #edf0e8;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #27352f;
+  --muted: #7a847b;
+  --green: #27624e;
+  --coral: #b75d48;
+  --line: #d4d9d0;
+  --mono: 'DM Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+body { min-width: 320px; min-height: 100vh; margin: 0; background-image: radial-gradient(#466b4d13 0.7px, transparent 0.7px); background-size: 9px 9px; }
+button { font: inherit; }
+.page-shell { display: flex; width: min(100% - 64px, 1040px); min-height: 100vh; flex-direction: column; margin: 0 auto; }
+.topbar { display: flex; height: 70px; align-items: center; gap: 11px; border-bottom: 1px solid var(--line); animation: rise 450ms ease-out both; }
+.brand-mark { display: grid; width: 27px; height: 27px; place-items: center; border: 1px solid var(--green); border-radius: 50%; color: var(--green); font-family: 'Playfair Display', serif; font-size: 15px; }
+.brand-name, .topbar-index, .eyebrow, .page-footer, .modal-eyebrow { font-family: var(--mono); text-transform: uppercase; letter-spacing: 0; }
+.brand-name { font-size: 10px; font-weight: 500; }
+.topbar-index { margin-left: auto; color: var(--muted); font-size: 9px; }
+.hero { width: min(100%, 690px); margin: auto; padding: 60px 0; animation: rise 600ms 70ms ease-out both; }
+.eyebrow { margin: 0 0 17px; color: var(--coral); font-size: 10px; }
+h1 { margin: 0; font-size: clamp(46px, 7vw, 78px); font-weight: 600; line-height: .99; }
+h1 em { color: var(--green); font-family: 'Playfair Display', serif; font-weight: 600; }
+.hero-copy { max-width: 495px; margin: 21px 0 27px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+.trigger-button { display: inline-flex; min-width: 174px; height: 48px; align-items: center; justify-content: space-between; gap: 28px; padding: 0 15px; border: 0; border-radius: 3px; background: var(--green); color: white; font-size: 12px; font-weight: 600; cursor: pointer; transition: background 150ms ease, transform 150ms ease; }
+.trigger-button:hover { transform: translateY(-2px); background: #194b3b; }
+.button-arrow { font-size: 17px; }
+.page-footer { display: flex; justify-content: space-between; gap: 12px; padding: 18px 0 25px; border-top: 1px solid var(--line); color: #858d84; font-size: 8px; }
+.modal-background { position: fixed; z-index: 5; display: flex; width: 100%; height: 100%; inset: 0; align-items: center; justify-content: center; padding: 20px; background: rgba(13, 22, 17, .58); animation: fade-in 140ms ease-out both; }
+.modal-body { position: relative; width: min(100%, 430px); padding: 31px; border: 1px solid #dfe3da; border-radius: 5px; background: #fbfcf8; box-shadow: 0 20px 70px #101c1540; animation: modal-in 180ms ease-out both; }
+.modal-mark { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 50%; background: #f4e5de; color: var(--coral); font-family: var(--mono); font-size: 18px; }
+.modal-eyebrow { margin: 21px 0 8px; color: var(--coral); font-size: 9px; }
+.modal-body h2 { margin: 0; font-size: 25px; line-height: 1.2; }
+.error-message { margin: 10px 0 18px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.error-details { margin: 0 0 19px; color: #657267; font-size: 11px; }
+.error-details summary { cursor: pointer; }
+.error-details pre { overflow: auto; white-space: pre-wrap; font-family: var(--mono); font-size: 10px; }
+.close-button { min-width: 86px; height: 38px; padding: 0 15px; border: 1px solid var(--green); border-radius: 3px; background: var(--green); color: white; font-size: 12px; font-weight: 600; cursor: pointer; }
+.close-button:hover { background: #194b3b; }
+button:focus-visible { outline: 3px solid #d17c61; outline-offset: 3px; }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-in { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (max-width: 520px) { .page-shell { width: min(100% - 36px, 1040px); } .hero { padding: 44px 0; } .modal-body { padding: 25px; } .page-footer { flex-direction: column; } }
