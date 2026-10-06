@@ -1,0 +1,45 @@
+{
+  "SocialMedias": ["Instagram", "LinkedIn", "GitHub", "X"],
+  "Skills": [
+    {
+      "name": "Frontend",
+      "items": ["HTML", "CSS", "JavaScript", "React"]
+    },
+    {
+      "name": "Backend",
+      "items": ["Node.js", "Express", "MongoDB"]
+    },
+    {
+      "name": "Tools",
+      "items": ["Git", "GitHub", "VS Code"]
+    }
+  ],
+  "Experiences": [
+    {
+      "company": "TechCorp",
+      "projects": [
+        {
+          "name": "Landing Page",
+          "stack": ["React", "Bootstrap", "CSS"]
+        },
+        {
+          "name": "Dashboard",
+          "stack": ["JavaScript", "Charts", "API"]
+        }
+      ]
+    },
+    {
+      "company": "CodeLab",
+      "projects": [
+        {
+          "name": "Portfolio",
+          "stack": ["HTML", "CSS", "JavaScript"]
+        },
+        {
+          "name": "Blog",
+          "stack": ["React", "Node.js"]
+        }
+      ]
+    }
+  ]
+}

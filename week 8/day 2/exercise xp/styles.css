@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #f5f7fb 0%, #eef2ff 100%);
+  font-family: Arial, Helvetica, sans-serif;
+  color: #1f2937;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1100px;
+}
+
+.navbar {
+  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.08);
+}
+
+.page-header {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.page-header h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-header p {
+  margin: 0;
+  color: #4b5563;
+}
+
+.card {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.post-list,
+.example-block,
+.webhook-panel {
+  margin-top: 1.5rem;
+}
+
+.list-group-item {
+  padding: 1rem 1.25rem;
+}
+
+.error-boundary {
+  padding: 1.5rem;
+  border: 1px solid #f5c2c7;
+  background: #fff5f5;
+  color: #842029;
+  border-radius: 12px;
+  margin: 1rem 0;
+}
+
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
