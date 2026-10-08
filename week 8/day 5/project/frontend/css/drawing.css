@@ -1,0 +1,74 @@
+.drawing-header { grid-template-columns: 180px 120px minmax(140px, 1fr) auto; gap: 16px; padding-right: 3vw; padding-left: 3vw; }
+.back-to-studio { color: var(--muted); font-size: 10px; text-decoration: none; }
+.back-to-studio:hover { color: var(--petrol); }
+.back-to-studio span { margin-right: 5px; color: var(--rose-deep); }
+.room-title-wrap { min-width: 0; display: flex; align-items: center; gap: 9px; }
+.room-title-wrap h1 { overflow: hidden; margin: 0; color: var(--petrol); font: 650 13px 'Manrope', sans-serif; text-overflow: ellipsis; white-space: nowrap; }
+.room-live-dot, .presence-dot { width: 7px; height: 7px; flex: 0 0 auto; border-radius: 50%; background: var(--petrol-mid); box-shadow: 0 0 0 3px rgb(12 155 114 / 14%); }
+.saved-label { overflow: hidden; color: #89918b; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.room-actions { display: flex; align-items: center; gap: 13px; }
+.collaborator-count { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 10px; white-space: nowrap; }
+.collaborator-count .presence-dot { width: 6px; height: 6px; }
+.profile-mini { display: inline-flex; text-decoration: none; }
+.user-initials { width: 30px; height: 30px; }
+.drawing-layout { min-height: calc(100vh - 70px); display: grid; grid-template-columns: 75px 1fr; }
+.tool-rail { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 20px 8px; border-right: 1px solid var(--line); background: #f1e6d7; }
+.tool-label { margin: 0; color: #838982; font: 9px 'DM Mono', monospace; letter-spacing: .06em; }
+.tool-button { width: 41px; height: 41px; display: grid; place-items: center; border: 1px solid transparent; border-radius: 3px; background: transparent; color: var(--petrol); cursor: pointer; transition: background 150ms ease, border-color 150ms ease; }
+.tool-button:hover, .tool-button.is-selected { border-color: #d6c8b5; background: var(--paper); }
+.tool-glyph { font-size: 22px; line-height: 1; }
+.eraser-glyph { font-size: 18px; transform: rotate(-38deg); }
+.rail-divider { width: 32px; height: 1px; background: #d9cbb8; }
+.size-slider { width: 87px; height: 18px; margin: 20px 0; accent-color: var(--petrol); transform: rotate(-90deg); }
+.size-readout { margin-top: -9px; color: var(--muted); font: 9px 'DM Mono', monospace; }
+.color-list { display: flex; flex-direction: column; gap: 8px; }
+.color-swatch { width: 23px; height: 23px; border: 2px solid #f1e6d7; border-radius: 50%; background: var(--swatch); cursor: pointer; }
+.color-swatch:hover, .color-swatch.selected { outline: 1px solid var(--petrol); outline-offset: 2px; }
+.custom-color { width: 25px; height: 25px; position: relative; display: grid; place-items: center; overflow: hidden; border: 1px dashed #a8aaa1; border-radius: 50%; color: var(--petrol); cursor: pointer; font-size: 17px; }
+.custom-color input { position: absolute; inset: -5px; width: 38px; height: 38px; opacity: 0; cursor: pointer; }
+.canvas-area { min-width: 0; display: flex; flex-direction: column; padding: 19px 23px 13px; }
+.canvas-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; }
+.canvas-hint { color: #78817c; font-size: 10px; }
+.canvas-commands { display: flex; gap: 7px; }
+.icon-command { min-height: 30px; border: 1px solid #ddd8cd; border-radius: 2px; padding: 0 10px; background: var(--paper); color: var(--petrol); cursor: pointer; font-size: 10px; }
+.icon-command:hover { border-color: var(--petrol-mid); }
+.danger-command { color: #9b5761; }
+.canvas-frame { position: relative; min-height: 300px; flex: 1; overflow: hidden; border: 1px solid #ddd3c4; background-color: var(--white); background-image: radial-gradient(#e8e1d7 0.7px, transparent 0.7px); background-size: 19px 19px; box-shadow: 0 7px 23px rgb(47 57 47 / 5%); }
+#drawing-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
+.canvas-connection { position: absolute; right: 12px; bottom: 10px; display: inline-flex; align-items: center; gap: 7px; border: 1px solid #ece7dd; border-radius: 2px; padding: 6px 9px; background: rgb(255 253 248 / 92%); color: #7b8580; font-size: 9px; pointer-events: none; }
+.canvas-connection .presence-dot { width: 5px; height: 5px; background: var(--sand); box-shadow: none; }
+.canvas-connection.is-connected .presence-dot { background: var(--petrol-mid); box-shadow: 0 0 0 3px rgb(12 155 114 / 14%); }
+.canvas-connection.is-error .presence-dot { background: #ad394b; box-shadow: none; }
+.canvas-footer { display: flex; justify-content: space-between; gap: 9px; margin: 10px 0 0; color: #969a92; font: 8px 'DM Mono', monospace; }
+
+@media (min-width: 1000px) {
+  .canvas-area { min-height: calc(100vh - 70px); }
+}
+@media (max-width: 800px) {
+  .drawing-header { grid-template-columns: auto 1fr auto; gap: 10px; padding: 0 3vw; }
+  .drawing-header .brand { grid-column: 1; }
+  .drawing-header .back-to-studio { display: none; }
+  .room-title-wrap { grid-column: 2; grid-row: 1; }
+  .room-actions { grid-column: 3; grid-row: 1; gap: 8px; }
+  .room-actions .collaborator-count { display: none; }
+  .saved-label { display: none; }
+  .drawing-layout { min-height: calc(100vh - 70px); grid-template-columns: 58px 1fr; }
+  .tool-rail { padding-right: 5px; padding-left: 5px; }
+  .canvas-area { padding: 14px 12px 10px; }
+}
+@media (max-width: 480px) {
+  .drawing-header { min-height: 61px; }
+  .drawing-header .brand { gap: 5px; font-size: 13px; }
+  .drawing-header .brand img { width: 26px; height: 26px; }
+  .room-title-wrap h1 { max-width: 95px; font-size: 11px; }
+  .room-actions .button { min-height: 31px; gap: 5px; padding: 0 7px; font-size: 9px; }
+  .profile-mini { display: none; }
+  .drawing-layout { min-height: calc(100vh - 61px); grid-template-columns: 49px 1fr; }
+  .tool-rail { gap: 9px; padding: 14px 3px; }
+  .tool-button { width: 34px; height: 34px; }
+  .size-slider { width: 74px; }
+  .canvas-area { padding: 10px 8px; }
+  .canvas-hint { max-width: 135px; font-size: 9px; }
+  .icon-command { min-height: 29px; padding: 0 7px; font-size: 9px; }
+  .canvas-footer { font-size: 7px; }
+}

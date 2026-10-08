@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#3457D5"><title>Drawing room - Common Canvas</title><link rel="icon" href="/assets/icons/studio-mark.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/drawing.css"></head>
+<body data-page="drawing">
+  <header class="app-header drawing-header"><a class="brand" href="/dashboard.html"><img src="/assets/icons/studio-mark.svg" alt=""><span>common<span class="brand-light">canvas</span></span></a><a class="back-to-studio" href="/dashboard.html"><span aria-hidden="true">&#8592;</span> My studio</a><div class="room-title-wrap"><span class="room-live-dot"></span><h1 id="room-title">Loading canvas...</h1><span class="saved-label" id="saved-label">All changes saved</span></div><div class="room-actions"><div class="collaborator-count" title="People in this room"><span class="presence-dot"></span><span id="presence-count">1 here</span></div><button class="button button-outline button-small" id="share-room" type="button">Share room <span aria-hidden="true">&#8599;</span></button><a class="profile-mini" href="/profile.html" aria-label="Your profile"><span class="user-initials">CC</span></a></div></header>
+  <main class="drawing-layout">
+    <aside class="tool-rail" aria-label="Drawing tools">
+      <p class="tool-label">TOOLS</p>
+      <button class="tool-button is-selected" data-tool="pen" type="button" aria-label="Pencil" title="Pencil"><span class="tool-glyph">&#9998;</span></button>
+      <button class="tool-button" data-tool="eraser" type="button" aria-label="Eraser" title="Eraser"><span class="tool-glyph eraser-glyph">&#9633;</span></button>
+      <span class="rail-divider"></span>
+      <label class="tool-label" for="brush-size">SIZE</label>
+      <input id="brush-size" class="size-slider" type="range" min="2" max="32" value="7" aria-label="Brush size">
+      <span class="size-readout"><span id="size-value">7</span> px</span>
+      <span class="rail-divider"></span>
+      <p class="tool-label">COLOR</p>
+      <div class="color-list" role="group" aria-label="Brush color">
+        <button class="color-swatch selected" style="--swatch:#3457D5" data-color="#3457D5" type="button" aria-label="Royal blue"></button>
+        <button class="color-swatch" style="--swatch:#0C9B72" data-color="#0C9B72" type="button" aria-label="Emerald green"></button>
+        <button class="color-swatch" style="--swatch:#F27664" data-color="#F27664" type="button" aria-label="Warm coral"></button>
+        <button class="color-swatch" style="--swatch:#F2C14E" data-color="#F2C14E" type="button" aria-label="Golden yellow"></button>
+        <button class="color-swatch" style="--swatch:#9B8AFB" data-color="#9B8AFB" type="button" aria-label="Soft lilac"></button>
+        <button class="color-swatch" style="--swatch:#7451B7" data-color="#7451B7" type="button" aria-label="Elegant purple"></button>
+        <button class="color-swatch" style="--swatch:#172A46" data-color="#172A46" type="button" aria-label="Deep ink"></button>
+      </div>
+      <label class="custom-color" title="Choose a custom color"><input id="custom-color" type="color" value="#3457D5" aria-label="Choose custom color"><span>+</span></label>
+    </aside>
+    <section class="canvas-area"><div class="canvas-toolbar"><span class="canvas-hint">A blank page is full of possibility.</span><div class="canvas-commands"><button id="download-png" class="icon-command" type="button" title="Download PNG">Download PNG</button><button id="clear-canvas" class="icon-command danger-command" type="button" title="Clear canvas">Clear</button></div></div><div class="canvas-frame"><canvas id="drawing-canvas" aria-label="Shared drawing canvas"></canvas><div class="canvas-connection" id="connection-status"><span class="presence-dot"></span> Connecting to your room...</div></div><p class="canvas-footer"><span>Every line is saved as you draw</span><span>COMMON CANVAS / STUDIO 01</span></p></section></main>
+  <div class="toast" role="status" aria-live="polite"></div><script src="/socket.io/socket.io.js"></script><script type="module" src="/js/main.js"></script><script type="module" src="/js/drawing.js"></script>
+</body>
+</html>

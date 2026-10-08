@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#3457D5">
+  <title>Sign in - Common Canvas</title><link rel="icon" href="/assets/icons/studio-mark.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/auth.css">
+</head>
+<body data-page="login">
+  <header class="public-header"><a class="brand" href="/"><img src="/assets/icons/studio-mark.svg" alt=""><span>common<span class="brand-light">canvas</span></span></a><a class="header-back" href="/">Back to home <span aria-hidden="true">&#8599;</span></a></header>
+  <main class="auth-layout"><section class="auth-aside"><p class="eyebrow">YOUR STUDIO IS WAITING</p><h1>Pick up where<br>the idea left off.</h1><p>Sign in to find your canvases and the people making them with you.</p><div class="aside-lines" aria-hidden="true"><span></span><span></span><span></span></div></section>
+    <section class="auth-panel"><div class="auth-heading"><p class="eyebrow">WELCOME BACK</p><h2>Sign in</h2><p>Good to see you again.</p></div>
+      <form id="auth-form" class="form-stack" data-mode="login"><label>Email address<input name="email" type="email" autocomplete="email" required placeholder="you@example.com"></label><label>Password<input name="password" type="password" autocomplete="current-password" required placeholder="Your password"></label><button class="button button-pink button-wide" type="submit">Sign in <span aria-hidden="true">&#8594;</span></button><p class="form-message" id="form-message" aria-live="polite"></p></form>
+      <p class="auth-switch">New to the studio? <a href="/register.html">Create an account</a></p>
+    </section>
+  </main><script type="module" src="/js/main.js"></script><script type="module" src="/js/auth.js"></script>
+</body>
+</html>
