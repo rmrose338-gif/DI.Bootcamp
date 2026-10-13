@@ -14,9 +14,9 @@
 .auth-heading > p:last-child { margin: 7px 0 0; color: var(--muted); font-size: 12px; }
 .form-stack { display: flex; flex-direction: column; gap: 16px; }
 .form-stack label, .project-dialog label { display: flex; flex-direction: column; gap: 7px; color: var(--petrol); font-size: 11px; font-weight: 600; }
-.form-stack input, .project-dialog input { width: 100%; min-height: 43px; border: 1px solid #ddd8ce; border-radius: 2px; padding: 0 12px; background: var(--white); color: var(--ink); font-size: 12px; }
+.form-stack input, .project-dialog input, .project-dialog select { width: 100%; min-height: 43px; border: 1px solid #ddd8ce; border-radius: 2px; padding: 0 12px; background: var(--white); color: var(--ink); font-size: 12px; }
 .form-stack input::placeholder, .project-dialog input::placeholder { color: #a6aaa2; }
-.form-stack input:focus, .project-dialog input:focus { border-color: var(--petrol-mid); outline: 0; box-shadow: 0 0 0 3px rgb(14 129 91 / 12%); }
+.form-stack input:focus, .project-dialog input:focus, .project-dialog select:focus { border-color: var(--petrol-mid); outline: 0; box-shadow: 0 0 0 3px rgb(14 129 91 / 12%); }
 .form-message { min-height: 15px; margin: -8px 0 0; color: var(--rose-deep); font-size: 11px; }
 .form-message.is-success { color: var(--petrol-mid); }
 .auth-switch { margin: 22px 0 0; color: var(--muted); font-size: 11px; }

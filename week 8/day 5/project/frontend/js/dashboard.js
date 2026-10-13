@@ -60,6 +60,20 @@ async function loadProjects() {
 }
 
 document.querySelector('#new-project')?.addEventListener('click', () => dialog.showModal());
+document.querySelector('#start-challenge')?.addEventListener('click', async (event) => {
+  const button = event.currentTarget;
+  button.disabled = true;
+  try {
+    const { project } = await api('/api/drawings', {
+      method: 'POST',
+      body: JSON.stringify({ title: 'Make one school-day task easier', template: 'solution-map' }),
+    });
+    window.location.assign(`/drawing-room.html?id=${encodeURIComponent(project.id)}`);
+  } catch (error) {
+    showToast(error.message, true);
+    button.disabled = false;
+  }
+});
 document.querySelectorAll('[data-close-dialog]').forEach((button) => button.addEventListener('click', () => dialog.close()));
 dialog?.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
 
@@ -72,7 +86,7 @@ projectForm?.addEventListener('submit', async (event) => {
   try {
     const { project } = await api('/api/drawings', {
       method: 'POST',
-      body: JSON.stringify({ title: projectForm.elements.title.value }),
+      body: JSON.stringify({ title: projectForm.elements.title.value, template: projectForm.elements.template.value }),
     });
     window.location.assign(`/drawing-room.html?id=${encodeURIComponent(project.id)}`);
   } catch (error) {

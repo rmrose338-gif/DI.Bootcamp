@@ -5,6 +5,7 @@ export function connectRoom(projectId, handlers) {
     handlers.onStatus?.('connecting', 'Joining your room...');
     socket.emit('room:join', { projectId }, (result) => {
       if (!result?.ok) handlers.onStatus?.('error', result?.error || 'Could not join this room.');
+      else handlers.onStatus?.('connected', 'Connected - your lines are syncing.');
     });
   });
   socket.on('connect_error', () => handlers.onStatus?.('error', 'Connection interrupted. Retrying...'));

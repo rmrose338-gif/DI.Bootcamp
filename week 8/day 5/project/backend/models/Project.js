@@ -3,7 +3,7 @@ import { db } from '../../database/database.js';
 
 function mapProject(project) {
   if (!project) return null;
-  return { id: project.id, title: project.title, ownerId: project.owner_id, createdAt: project.created_at, updatedAt: project.updated_at };
+  return { id: project.id, title: project.title, ownerId: project.owner_id, template: project.board_type || 'free', createdAt: project.created_at, updatedAt: project.updated_at };
 }
 
 export const Project = {
@@ -13,14 +13,14 @@ export const Project = {
   findById(id) {
     return mapProject(db.prepare('SELECT * FROM projects WHERE id = ?').get(id));
   },
-  create(title, ownerId) {
+  create(title, ownerId, template = 'solution-map') {
     const id = randomUUID();
     const now = new Date().toISOString();
-    const createProject = db.prepare('INSERT INTO projects (id, title, owner_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)');
+    const createProject = db.prepare('INSERT INTO projects (id, title, owner_id, board_type, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)');
     const createDrawing = db.prepare('INSERT INTO drawings (project_id, strokes, updated_at) VALUES (?, ?, ?)');
     db.exec('BEGIN');
     try {
-      createProject.run(id, title, ownerId, now, now);
+      createProject.run(id, title, ownerId, template, now, now);
       createDrawing.run(id, '[]', now);
       db.exec('COMMIT');
     } catch (error) {

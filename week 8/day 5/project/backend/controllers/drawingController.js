@@ -7,8 +7,10 @@ export function listProjects(request, response) {
 
 export function createProject(request, response) {
   const title = String(request.body.title || '').trim();
+  const template = String(request.body.template || 'solution-map');
   if (title.length < 1 || title.length > 60) return response.status(400).json({ error: 'Canvas name must be between 1 and 60 characters.' });
-  return response.status(201).json({ project: Project.create(title, request.user.id) });
+  if (!['solution-map', 'free'].includes(template)) return response.status(400).json({ error: 'Choose a valid canvas format.' });
+  return response.status(201).json({ project: Project.create(title, request.user.id, template) });
 }
 
 export function getDrawing(request, response) {

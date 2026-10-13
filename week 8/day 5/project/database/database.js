@@ -33,3 +33,30 @@ db.exec(`
     updated_at TEXT NOT NULL
   );
 `);
+
+const projectColumns = db.prepare('PRAGMA table_info(projects)').all();
+if (!projectColumns.some((column) => column.name === 'board_type')) {
+  db.exec("ALTER TABLE projects ADD COLUMN board_type TEXT NOT NULL DEFAULT 'free'");
+}
+
+const existingUsers = db.prepare('SELECT id, name FROM users ORDER BY created_at, id').all();
+const reservedNames = new Set(existingUsers.map((user) => user.name.toLowerCase()));
+const seenNames = new Set();
+const renameUser = db.prepare('UPDATE users SET name = ? WHERE id = ?');
+for (const user of existingUsers) {
+  const normalizedName = user.name.toLowerCase();
+  if (!seenNames.has(normalizedName)) {
+    seenNames.add(normalizedName);
+    continue;
+  }
+  let suffix = 2;
+  let uniqueName;
+  do {
+    const suffixText = `-${suffix++}`;
+    uniqueName = `${user.name.slice(0, 40 - suffixText.length)}${suffixText}`;
+  } while (reservedNames.has(uniqueName.toLowerCase()));
+  renameUser.run(uniqueName, user.id);
+  reservedNames.add(uniqueName.toLowerCase());
+  seenNames.add(uniqueName.toLowerCase());
+}
+db.exec('CREATE UNIQUE INDEX IF NOT EXISTS users_name_unique ON users(name COLLATE NOCASE)');

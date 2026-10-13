@@ -48,7 +48,6 @@ async function boot() {
     const profileForm = document.querySelector('#profile-form');
     if (profileForm) {
       profileForm.elements.name.value = user.name;
-      profileForm.elements.email.value = user.email;
       profileForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const message = document.querySelector('#profile-message');
@@ -56,7 +55,7 @@ async function boot() {
         try {
           const updated = await api('/api/users/me', {
             method: 'PATCH',
-            body: JSON.stringify({ name: profileForm.elements.name.value, email: profileForm.elements.email.value }),
+            body: JSON.stringify({ name: profileForm.elements.name.value }),
           });
           document.querySelectorAll('.user-label').forEach((element) => { element.textContent = updated.user.name; });
           setInitials(updated.user.name);

@@ -3,6 +3,7 @@ import { connectRoom } from './collaboration.js';
 
 const canvas = document.querySelector('#drawing-canvas');
 const context = canvas?.getContext('2d');
+const eraserCursor = document.querySelector('#eraser-cursor');
 const roomId = new URLSearchParams(window.location.search).get('id');
 const strokes = [];
 let roomSocket;
@@ -11,6 +12,29 @@ let activeTool = 'pen';
 let activeColor = '#3457D5';
 let brushSize = 7;
 let pixelRatio = 1;
+
+function updateToolState() {
+  canvas?.classList.toggle('is-erasing', activeTool === 'eraser');
+  document.querySelectorAll('[data-tool]').forEach((button) => {
+    const selected = button.dataset.tool === activeTool;
+    button.classList.toggle('is-selected', selected);
+    button.setAttribute('aria-pressed', String(selected));
+  });
+  if (eraserCursor) {
+    eraserCursor.style.width = `${brushSize}px`;
+    eraserCursor.style.height = `${brushSize}px`;
+  }
+}
+
+function updateEraserCursor(event) {
+  if (!canvas || !eraserCursor) return;
+  const bounds = canvas.getBoundingClientRect();
+  const insideCanvas = event.clientX >= bounds.left && event.clientX <= bounds.right
+    && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
+  eraserCursor.classList.toggle('is-visible', activeTool === 'eraser' && insideCanvas);
+  eraserCursor.style.left = `${event.clientX - bounds.left}px`;
+  eraserCursor.style.top = `${event.clientY - bounds.top}px`;
+}
 
 const brushPalette = [
   { color: '#3457D5', label: 'Royal blue' },
@@ -107,6 +131,7 @@ canvas?.addEventListener('pointerdown', (event) => {
     return;
   }
   event.preventDefault();
+  updateEraserCursor(event);
   canvas.setPointerCapture(event.pointerId);
   currentStroke = { tool: activeTool, color: activeColor, size: brushSize, points: [pointFromEvent(event)] };
   strokes.push(currentStroke);
@@ -115,6 +140,7 @@ canvas?.addEventListener('pointerdown', (event) => {
 });
 
 canvas?.addEventListener('pointermove', (event) => {
+  updateEraserCursor(event);
   if (!currentStroke) return;
   const point = pointFromEvent(event);
   const previous = currentStroke.points[currentStroke.points.length - 1];
@@ -136,13 +162,15 @@ function finishStroke() {
   });
 }
 
+canvas?.addEventListener('pointerleave', () => eraserCursor?.classList.remove('is-visible'));
 canvas?.addEventListener('pointerup', finishStroke);
 canvas?.addEventListener('pointercancel', finishStroke);
 canvas?.addEventListener('lostpointercapture', finishStroke);
 
 document.querySelectorAll('[data-tool]').forEach((button) => button.addEventListener('click', () => {
   activeTool = button.dataset.tool;
-  document.querySelectorAll('[data-tool]').forEach((item) => item.classList.toggle('is-selected', item === button));
+  eraserCursor?.classList.remove('is-visible');
+  updateToolState();
 }));
 
 document.querySelectorAll('[data-color]').forEach((button) => button.addEventListener('click', () => {
@@ -158,6 +186,7 @@ document.querySelector('#custom-color')?.addEventListener('input', (event) => {
 document.querySelector('#brush-size')?.addEventListener('input', (event) => {
   brushSize = Number(event.target.value);
   document.querySelector('#size-value').textContent = String(brushSize);
+  updateToolState();
 });
 
 document.querySelector('#clear-canvas')?.addEventListener('click', () => {
@@ -202,6 +231,7 @@ async function start() {
   try {
     const { project, strokes: savedStrokes } = await api(`/api/drawings/${encodeURIComponent(roomId)}`);
     document.querySelector('#room-title').textContent = project.title;
+    document.querySelector('#solution-guide').hidden = project.template !== 'solution-map';
     strokes.push(...savedStrokes);
     resizeCanvas();
     roomSocket = connectRoom(roomId, {
