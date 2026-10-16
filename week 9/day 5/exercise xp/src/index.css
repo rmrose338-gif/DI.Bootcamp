@@ -1,0 +1,320 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap');
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #252a25;
+  background: #f5f2e9;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --paper: #f5f2e9;
+  --ink: #252a25;
+  --muted: #76766d;
+  --line: #d9d5c9;
+  --green: #355b49;
+  --coral: #c4674f;
+  --gold: #b38b42;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background-image: radial-gradient(#4d493d 0.45px, transparent 0.45px);
+  background-size: 7px 7px;
+  background-color: var(--paper);
+}
+
+button,
+a {
+  font: inherit;
+}
+
+.inventory-shell {
+  max-width: 1280px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 7.4%;
+  background: var(--paper);
+}
+
+.masthead {
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: block;
+  width: 38px;
+  height: 38px;
+  line-height: 36px;
+  text-align: center;
+  white-space: nowrap;
+  border: 1px solid var(--green);
+  border-radius: 50%;
+  color: var(--green);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 13px;
+}
+
+.brand-mark span {
+  color: var(--coral);
+}
+
+.brand-name,
+.edition,
+.eyebrow,
+.section-kicker,
+.book-total,
+.shelf-index,
+.inventory-footer,
+.book-number {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+}
+
+.brand-name span,
+.edition span,
+.slash,
+.shelf-index span {
+  color: var(--coral);
+}
+
+.masthead-note {
+  margin: 0;
+  color: var(--muted);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.edition {
+  margin: 0;
+  color: var(--muted);
+}
+
+.inventory {
+  padding-top: 76px;
+}
+
+.intro-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  padding-bottom: 57px;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 24px;
+  color: var(--muted);
+}
+
+.eyebrow-mark {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(46px, 6vw, 76px);
+  font-weight: 500;
+  line-height: 1.01;
+}
+
+h1 em {
+  color: var(--green);
+  font-weight: 500;
+}
+
+.intro-copy {
+  max-width: 260px;
+  margin: 0 1% 7px 0;
+  color: #63665e;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.shelf-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 17px 0;
+  border-top: 1px solid var(--ink);
+}
+
+.shelf-heading > div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.section-kicker {
+  color: var(--ink);
+}
+
+.book-total,
+.shelf-index {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.collection-tabs {
+  display: flex;
+  gap: 7px;
+  padding: 0 0 19px;
+  border-bottom: 1px solid var(--line);
+}
+
+.collection-tab {
+  min-height: 37px;
+  padding: 0 15px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: transparent;
+  color: #686a62;
+  cursor: pointer;
+  font-size: 12px;
+  transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease;
+}
+
+.collection-tab:hover {
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.collection-tab.is-active {
+  border-color: var(--green);
+  background: var(--green);
+  color: #fffdf6;
+}
+
+.collection-tab:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 3px;
+}
+
+.book-row {
+  min-height: 84px;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) 150px 24px;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+  animation: arrive 260ms both;
+}
+
+.book-row:nth-child(2) { animation-delay: 35ms; }
+.book-row:nth-child(3) { animation-delay: 70ms; }
+.book-row:nth-child(4) { animation-delay: 105ms; }
+
+.book-number {
+  color: #9a988d;
+  font-variant-numeric: tabular-nums;
+}
+
+.book-title-block h2 {
+  margin: 0 0 5px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.book-title-block p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.genre-tag {
+  width: fit-content;
+  padding: 6px 9px;
+  border: 1px solid #d9d5c9;
+  border-radius: 2px;
+  color: #686a62;
+  font-size: 10px;
+}
+
+.genre-horror { border-color: #e3c2b8; color: #a24e3a; }
+.genre-fantasy { border-color: #d9cfad; color: #866729; }
+.genre-science-fiction { border-color: #bad0c3; color: #355b49; }
+
+.row-arrow {
+  color: #aaa69a;
+  font-size: 15px;
+  text-align: right;
+}
+
+.inventory-footer {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.footer-rule {
+  height: 1px;
+  flex: 1;
+  background: var(--line);
+}
+
+.inventory-footer > span:last-child span {
+  padding-left: 4px;
+  color: var(--coral);
+  font-size: 13px;
+}
+
+@keyframes arrive {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 680px) {
+  .inventory-shell { padding: 0 6%; }
+  .masthead { height: 72px; }
+  .masthead-note { display: none; }
+  .brand-mark { width: 34px; height: 34px; }
+  .inventory { padding-top: 52px; }
+  .intro-row { display: block; padding-bottom: 38px; }
+  .eyebrow { margin-bottom: 19px; font-size: 9px; }
+  h1 { font-size: 53px; }
+  .intro-copy { max-width: 310px; margin: 20px 0 0; font-size: 13px; }
+  .collection-tabs { gap: 4px; overflow-x: auto; }
+  .collection-tab { flex: 0 0 auto; padding: 0 11px; font-size: 11px; }
+  .book-row { min-height: 78px; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 9px; }
+  .book-title-block h2 { font-size: 16px; }
+  .genre-tag { grid-column: 2; grid-row: 2; margin-top: -16px; font-size: 9px; }
+  .book-row { padding: 12px 0; }
+  .book-title-block { align-self: end; }
+  .row-arrow { grid-column: 3; grid-row: 1 / span 2; }
+  .shelf-index { font-size: 8px; }
+  .inventory-footer { gap: 9px; font-size: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
