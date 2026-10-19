@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f1e9" />
+    <meta
+      name="description"
+      content="A TypeScript recipe book for saving, favoriting, and managing recipes locally."
+    />
+    <title>Recipe Book | Mini Project 1</title>
+  </head>
+  <body>
+    <main class="recipe-app">
+      <header class="page-header">
+        <p class="eyebrow">Week 10 · Day 2 · Mini Project 1</p>
+        <h1>Recipes worth keeping.</h1>
+        <p>Gather the good ones. Keep them close. Make them again.</p>
+      </header>
+
+      <div class="content-grid">
+        <section class="recipe-form-panel" aria-labelledby="form-heading">
+          <div class="section-heading">
+            <div>
+              <p class="section-label">Save something delicious</p>
+              <h2 id="form-heading">New recipe</h2>
+            </div>
+          </div>
+          <form id="recipeEntryForm" class="recipe-form">
+            <label for="recipeTitle">Recipe title</label>
+            <input
+              type="text"
+              id="recipeTitle"
+              name="recipeTitle"
+              placeholder="e.g. Sunday tomato pasta"
+              maxlength="100"
+              required
+            />
+
+            <label for="ingredients">Ingredients <span>(one per line)</span></label>
+            <textarea
+              id="ingredients"
+              name="ingredients"
+              placeholder="Ripe tomatoes&#10;Fresh basil&#10;Olive oil"
+              required
+            ></textarea>
+
+            <label for="instructions">Instructions</label>
+            <textarea
+              id="instructions"
+              name="instructions"
+              placeholder="Add the steps, one at a time..."
+              required
+            ></textarea>
+
+            <button class="primary-button" type="submit">Add recipe</button>
+          </form>
+          <p id="statusMessage" class="status-message" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="collection-panel" aria-labelledby="collection-heading">
+          <div class="section-heading">
+            <div>
+              <p class="section-label">Your kitchen notebook</p>
+              <h2 id="collection-heading">Recipe collection</h2>
+            </div>
+            <span id="recipeCount" class="recipe-count">0 recipes</span>
+          </div>
+          <div id="recipeContainer" class="recipe-list"></div>
+          <div class="collection-footer">
+            <button id="clearRecipesButton" class="clear-button" type="button">
+              Clear all recipes
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
